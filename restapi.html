@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+
+<!-- includes the Leaflet CSS for the map styling -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+<!-- The container where the map will be rendered -->
+<div id="map" style="height:100vh;"></div>
+
+<!-- Includes the Leaflet Javascript library -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<script>
+// Initializes the map and sets a default center and zoom setting
+  var map = L.map('map').setView([52.13, 5.29], 7);
+
+// Adds the title layer to the map
+  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', { BmaxZoom: 19 }).addTo(map);
+
+// Sends an API request to OpenStreetMap Nominatim to search for Roermond
+  fetch('https://nominatim.openstreetmap.org/search?format=json&q=Roermond', { headers: { 'Accept': 'application/json' } })
+    .then(r => r.json())
+    .then(d => { 
+      
+    // Checks for results from the API
+      if (d.length) 
+
+    //Extracts the latitude and logitude from the first result
+    { let lat = parseFloat(d[0].lat), 
+    lon = parseFloat(d[0].lon); 
+
+    // Recenters the map to the found coordinates with a closer zoom
+    map.setView([lat, lon], 13); 
+
+    // Places a marker on the map to show the coordinates
+    L.marker([lat, lon]).addTo(map).bindPopup('Roermond').openPopup(); } });
+</script>
